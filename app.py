@@ -1,5 +1,6 @@
 if __name__ == "__main__":
     from src.score_card import ScoreCard
+
     pins = "81-92/x637-52x-62/x"
     scoreCard = ScoreCard(pins)
     print(scoreCard.generate_frames())
@@ -15,3 +16,4 @@ if __name__ == "__main__":
 
     # print(scoreCard3.get_frame_pins())
     print(scoreCard3.generate_frames())
+    print(len(scoreCard3.generate_frames()))

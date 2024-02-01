@@ -42,15 +42,11 @@ class StrikeToken(BaseToken):
 
 
 class Frame:
-    @dataclass
-    class InternalFrameState:
-        pass
-
     VALID_CHARS = "123456789x-/"
 
     def __init__(self, pins=""):
         self.__pins = pins
-    
+
     def __repr__(self):
         return str(self.pins)
 
@@ -65,20 +61,25 @@ class Frame:
     def validate_pins(self):
         return all(char.lower() in Frame.VALID_CHARS for char in self.pins)
 
-
-    def calc_spare (self):
-        spare_index = self.pins.find('/')
-        spare_value = 10 - int(self.pins[spare_index + 1]) 
-        return spare_value 
+    def calc_spare(self):
+        spare_index = self.pins.find("/")
+        spare_value = 10 - int(self.pins[spare_index + 1])
+        return spare_value
 
     def calc_special_character_puntuation(self):
-        #sustituir los caracteres especiales por su valor, directamente pues ya hemos separado de 2 en 2
-        special_char = {"x": lambda: 10, "-": lambda: 0, "/": lambda: self.calc_spare()}
-
-        pass
+        special_char_values = {
+            "X": lambda: 10,
+            "-": lambda: 0,
+            "/": lambda: self.calc_spare(),
+        }
+        for key, value in special_char_values.items():
+            pins_reverted = self.pins.replace(key, str(value()))
+        return pins_reverted
 
     def calc_score(self):
-        pass
+        return sum(
+            int(pin_value) for pin_value in self.calc_special_character_puntuation()
+        )
 
 
 class LastFrame(Frame):
@@ -89,6 +90,5 @@ class LastFrame(Frame):
 
 if __name__ == "__main__":
     print(LastFrame("12").has_three_rolls())
-    frame = Frame('/1')
-    print(frame.calc_spare())
-
+    frame = Frame("/1")
+    print(frame.calc_score())

@@ -5,10 +5,8 @@ import re
 def group_elements(input_list, n):
     result = []
     for i in range(0, len(input_list), n):
-        if i + 1 < len(input_list):
-            result.append((input_list[i], input_list[i + 1]))
-        else:
-            result.append((input_list[i],))
+        current_group = input_list[i : i + n]
+        result.append(tuple(current_group))
     return result
 
 
@@ -30,17 +28,16 @@ class ScoreCard:
         return pattern.sub(r"-\1", self.pins)
 
     def generate_frames(self):
-        padded_reversed_pins = self.padded_pins()[::-1]
-        last_frame_ending_index = 1
-        last_frame = LastFrame(padded_reversed_pins[:last_frame_ending_index])
+        padded_reversed_pins = self.padded_pins()
+        last_frame_ending_index = len(padded_reversed_pins) - 2
+        last_frame = LastFrame(padded_reversed_pins[last_frame_ending_index:])
         if last_frame.has_three_rolls():
-            last_frame_ending_index = 2
-            last_frame = LastFrame(padded_reversed_pins[:last_frame_ending_index])
-        return (
-            last_frame,
-        ) + tuple(  # TODO: por algun motivo, last frame no es una tupla como el resto
+            last_frame_ending_index = len(padded_reversed_pins) - 3
+            last_frame = LastFrame(padded_reversed_pins[last_frame_ending_index:])
+        return tuple(
             Frame(pins)
             for pins in group_elements(
-                padded_reversed_pins[last_frame_ending_index:], 2
+                padded_reversed_pins[:last_frame_ending_index],
+                2,  # agrupar de 2 en 2 desde el último frame, este no incluido
             )
-        )  # agrupar de 2 en 2 desde el último frame, este no incluido
+        ) + tuple(group_elements(last_frame.pins, 3))
