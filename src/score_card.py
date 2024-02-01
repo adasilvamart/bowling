@@ -1,13 +1,5 @@
-from src.frame import Frame, LastFrame
+from src.frame import Frame, LastFrame, group_elements
 import re
-
-
-def group_elements(input_list, n):
-    result = []
-    for i in range(0, len(input_list), n):
-        current_group = input_list[i : i + n]
-        result.append(tuple(current_group))
-    return result
 
 
 class ScoreCard:
