@@ -1,22 +1,20 @@
-if __name__ == "__main__":
-    from src.score_card import ScoreCard
-    from src.frame import LastFrame
+from src.scorecard import ScoreCard
 
-    pins = "81-92/x637-52x-62/x"
-    scoreCard = ScoreCard(pins)
-    print(scoreCard.generate_frames())
-    # total3 = 122
+if __name__ == '__main__':
+    games = [
+        ''
+        'xxxxxxxxxxxx',
+        '8/549-XX5/53639/9/X',
+        '9-3561368153258-7181',
+        '9-9-9-9-9-9-9-9-9-9-',
+        'X5/X5/XX5/--5/X5/',
+        '9-9-9-9-9-9-9-9-9-XXX',
+        'XXX9-9-9-9-9-9-9-',
+        '5/5/5/5/5/5/5/5/5/5/5',
+        '9-3/613/815/-/8-7/8/8'
+    ]
 
-    pins2 = "1-x1232x123-x"
-    scoreCard2 = ScoreCard(pins2)
-    print(scoreCard2.generate_frames())
-    # print(scoreCard2.get_frame_pins())
-
-    pins3 = "12345123451234512345"
-    scoreCard3 = ScoreCard(pins3)
-
-    # print(scoreCard3.get_frame_pins())
-    print(scoreCard3.generate_frames())
-    print(len(scoreCard3.generate_frames()))
-
-    print(LastFrame("1/x").calc_score())
+    for game in games:
+        scorecard = ScoreCard(game)
+        print(scorecard)
+        print(f'\n{"-" * 110 }\n')
