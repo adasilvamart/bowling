@@ -46,10 +46,8 @@ class ScoreCard():
 
 
     def getFramesScore(self):
-
         totalScore, frameScore = self.game.calcScore()        
-        frames = self.buildFrames(self.game.getPins())
-        
+        frames = self.buildFrames(self.game.getPins())   
         return list(zip(frames, frameScore)), totalScore
 
 
@@ -71,7 +69,7 @@ class ScoreCard():
                     padded_pins += '-' + pins[i]
             return padded_pins + pins[-3:]
 
-    
+
     def buildFrames(self, pins):
         padded_pins = self.padded_pins(pins)
         frames = []
@@ -87,11 +85,6 @@ class ScoreCard():
             
     def hasThreeRolls(self):
         pins = self.game.getPins()
-        frames = []
-
-        for i in range(0, len(pins), 2):
-            frames.append((pins)[i : i + 2])
-
-        if any(len(pin) < 2 for pin in frames) or any(pin == "x" or pin == "/" for pin in pins[-3:]):
+        if any(pin.lower() == "x" or pin == "/" for pin in pins[-3:]):
             return True
         return False
