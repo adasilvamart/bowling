@@ -1,37 +1,56 @@
-from src.scorecard import ScoreCard
+from src.game import Game
+import pytest
 
 
-def test_NumericPins():
-    game = ScoreCard('12345123451234512345')
-    total = 60
-    assert game.score, total
+@pytest.mark.parametrize(
+    "pins, final_score",
+    [
+        ("xxxxxxxxxxxx", 300),
+        ("8/549-XX5/53639/9/X", 149),
+        ("9-3561368153258-7181", 82),
+        ("9-9-9-9-9-9-9-9-9-9-", 90),
+        ("X5/X5/XX5/--5/X5/", 175),
+        ("9-9-9-9-9-9-9-9-9-XXX", 111),
+        ("XXX9-9-9-9-9-9-9-", 141),
+        ("5/5/5/5/5/5/5/5/5/5/5", 150),
+        ("9-3/613/815/-/8-7/8/8", 131),
+    ],
+)
+def test_calculate_scores(pins, final_score):
+    assert Game(pins).get_score() == final_score
 
 
-def test_spareInGame():
-    game = ScoreCard('9-3/613/815/-/8-7/8/8')
-    total = 131
-    assert game.score, total
-
-
-def test_concatenateSpares():
-    game = ScoreCard('5/5/5/5/5/5/5/5/5/5/5')
-    total = 150
-    assert game.score, total
-
-
-def test_perfectGame():
-    game = ScoreCard('xxxxxxxxxxxx')
-    total = 300
-    assert game.score, total
-
-
-def test_tripleStrike():
-    game = ScoreCard('XXX9-9-9-9-9-9-9-')
-    total = 141
-    assert game.score, total
-
-
-def test_spareInLastRoll():
-    game = ScoreCard('8/549-XX5/53639/9/X')
-    total = 149
-    assert game.score, total
+@pytest.mark.parametrize(
+    "pins, numeric_pins",
+    [
+        ("xxxxxxxxxxxx", [10] * 12),
+        (
+            "8/549-XX5/53639/9/X",
+            [8, 2, 5, 4, 9, 0, 10, 10, 5, 5, 5, 3, 6, 3, 9, 1, 9, 1, 10],
+        ),
+        (
+            "9-3561368153258-7181",
+            [9, 0, 3, 5, 6, 1, 3, 6, 8, 1, 5, 3, 2, 5, 8, 0, 7, 1, 8, 1],
+        ),
+        (
+            "9-9-9-9-9-9-9-9-9-9-",
+            [9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0],
+        ),
+        ("X5/X5/XX5/--5/X5/", [10, 5, 5, 10, 5, 5, 10, 10, 5, 5, 0, 0, 5, 5, 10, 5, 5]),
+        (
+            "9-9-9-9-9-9-9-9-9-XXX",
+            [9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 10, 10, 10],
+        ),
+        ("XXX9-9-9-9-9-9-9-", [10, 10, 10, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0]),
+        (
+            "5/5/5/5/5/5/5/5/5/5/5",
+            [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+        ),
+        (
+            "9-3/613/815/-/8-7/8/8",
+            [9, 0, 3, 7, 6, 1, 3, 7, 8, 1, 5, 5, 0, 10, 8, 0, 7, 3, 8, 2, 8],
+        ),
+    ],
+)
+def test_set_num_pins(pins, numeric_pins):
+    assert Game(pins).calc_pin_values() == numeric_pins
