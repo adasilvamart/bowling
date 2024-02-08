@@ -7,9 +7,7 @@ class Game:
     def __init__(self, pins):
         self.pins = self.is_pin_valid(pins)
         self.num_pins = self.calc_pin_values()
-
         self.score = self.calculate_score()[0]
-        self.frame_score = self.calculate_score()[1]
 
     def get_score(self):
         return self.score
@@ -41,7 +39,7 @@ class Game:
                 else:
                     num_pins.append(10 - int(pins[i - 1]))
 
-            elif pin in self.ZERO:  # Nill
+            elif pin in self.ZERO:  # Null
                 num_pins.append(0)
 
             else:  # Strike
@@ -52,7 +50,7 @@ class Game:
     def is_pin_valid(self, pins):
         if all(pin.lower() in self.VALID_CHARS for pin in pins):
             return pins
-        raise ValueError
+        return None
 
     def calculate_score(self):
         score = 0

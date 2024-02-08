@@ -33,6 +33,7 @@ class ScoreCard:
 
                 if len(str(result)) == 3:
                     formatted_result += f"  {result}  |"
+
                 elif len(str(result)) == 1:
                     formatted_result += f"   {result}   |"
                 else:
